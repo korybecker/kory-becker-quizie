@@ -14,7 +14,6 @@ export const getStaticProps = async () => {
     const allPosts = JSON.stringify(posts);
     return {
         props: { allPosts },
-        revalidate: 10,
     };
 };
 

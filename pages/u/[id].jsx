@@ -18,7 +18,6 @@ export const getServerSideProps = async ({ params }) => {
     quizzes = JSON.stringify(quizzes);
     return {
         props: { user, quizzes },
-        revalidate: 10,
     };
 };
 
