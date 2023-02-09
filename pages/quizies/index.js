@@ -23,9 +23,12 @@ export default function Quizies({ allPosts }) {
         <>
             <h1 style={{ textAlign: "center" }}>Quizies</h1>
             <div className={styles.container}>
-                {allPosts.map((post, i) => {
-                    return <QuizBlock key={i} post={post} />;
-                })}
+                {allPosts
+                    .slice(0)
+                    .reverse()
+                    .map((post, i) => {
+                        return <QuizBlock key={i} post={post} />;
+                    })}
             </div>
         </>
     );

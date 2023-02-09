@@ -50,11 +50,18 @@ export default function Profile({ user, quizzes }) {
                         width: "90%",
                     }}
                 >
-                    {quizzes.map((quiz, i) => {
-                        return (
-                            <QuizBlock key={i} post={quiz} isProfile={true} />
-                        );
-                    })}
+                    {quizzes
+                        .slice(0)
+                        .reverse()
+                        .map((quiz, i) => {
+                            return (
+                                <QuizBlock
+                                    key={i}
+                                    post={quiz}
+                                    isProfile={true}
+                                />
+                            );
+                        })}
                 </div>
             </div>
         </div>

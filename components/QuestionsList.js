@@ -20,34 +20,31 @@ export default function QuestionsList({
                     maxWidth: 500,
                 }}
             >
-                {questions
-                    .slice(0)
-                    .reverse()
-                    .map((question, questionIndex) => {
-                        return (
-                            <div
-                                style={{
-                                    display: "block",
-                                    marginLeft: "1rem",
-                                    marginRight: "1rem",
-                                }}
-                                key={questionIndex}
-                            >
-                                <FormLabel id="demo-radio-buttons-group-label">
-                                    {questionIndex + 1}. {question.text}
-                                </FormLabel>
-                                <RadioGroup aria-labelledby="demo-radio-buttons-group-label">
-                                    <OptionsList
-                                        options={question.options}
-                                        questionIndex={questionIndex}
-                                        chosenOptions={chosenOptions}
-                                        setChosenOptions={setChosenOptions}
-                                    />
-                                </RadioGroup>
-                                <hr width="100%" />
-                            </div>
-                        );
-                    })}
+                {questions.map((question, questionIndex) => {
+                    return (
+                        <div
+                            style={{
+                                display: "block",
+                                marginLeft: "1rem",
+                                marginRight: "1rem",
+                            }}
+                            key={questionIndex}
+                        >
+                            <FormLabel id="demo-radio-buttons-group-label">
+                                {questionIndex + 1}. {question.text}
+                            </FormLabel>
+                            <RadioGroup aria-labelledby="demo-radio-buttons-group-label">
+                                <OptionsList
+                                    options={question.options}
+                                    questionIndex={questionIndex}
+                                    chosenOptions={chosenOptions}
+                                    setChosenOptions={setChosenOptions}
+                                />
+                            </RadioGroup>
+                            <hr width="100%" />
+                        </div>
+                    );
+                })}
                 {!quizTaken && (
                     <Button
                         type="submit"
