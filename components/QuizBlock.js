@@ -36,11 +36,11 @@ export default function QuizBlock({ post, isProfile }) {
     return (
         <div className={styles.quizblock}>
             <h3>
-                <Link href={`/q/${post.id}`}>{post.title}</Link>
+                <Link href={`/quizie/${post.id}`}>{post.title}</Link>
             </h3>
             {!isProfile && (
                 <p>
-                    <Link href={`/u/${post.creatorId}`}>
+                    <Link href={`/user/${post.creatorId}`}>
                         {post.creator.name}
                     </Link>
                 </p>

@@ -44,7 +44,7 @@ function ResponsiveAppBar() {
 
     const settingUrls = {
         Login: "/api/auth/signin",
-        Profile: `/u/${session?.userId}`,
+        Profile: `/user/${session?.userId}`,
     };
 
     const [anchorElNav, setAnchorElNav] = useState(null);

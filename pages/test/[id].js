@@ -1,12 +1,16 @@
-import { useRouter } from "next/router";
-
-export default function testPage() {
-    const router = useRouter();
-    const { pid } = router.query;
+export default function testPage({ id }) {
     return (
         <div>
             <h1>Test</h1>
-            <p>pid: {pid}</p>
+            <p>{id}</p>
         </div>
     );
+}
+
+export async function getServerSideProps({ params }) {
+    return {
+        props: {
+            id: params.id,
+        },
+    };
 }
