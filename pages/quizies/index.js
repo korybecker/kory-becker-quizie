@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma";
 import QuizBlock from "@/components/QuizBlock";
 import styles from "@/styles/Home.module.css";
 
-export const getStaticProps = async () => {
+export const getServerSideProps = async () => {
     const posts = await prisma.quiz.findMany({
         where: { published: false },
         include: {
@@ -14,7 +14,6 @@ export const getStaticProps = async () => {
     const allPosts = JSON.stringify(posts);
     return {
         props: { allPosts },
-        revalidate: 10,
     };
 };
 

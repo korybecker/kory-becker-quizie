@@ -4,7 +4,6 @@ import { useState } from "react";
 import styles from "@/styles/Home.module.css";
 
 export const getServerSideProps = async ({ params }) => {
-    console.log("GET SERVER SIDE PROPS QUIZIE");
     let quiz = await prisma.quiz.findUnique({
         where: {
             id: String(params?.id),
@@ -19,7 +18,6 @@ export const getServerSideProps = async ({ params }) => {
         },
     });
     quiz = JSON.stringify(quiz);
-    console.log(quiz);
     return {
         props: { quiz },
     };
