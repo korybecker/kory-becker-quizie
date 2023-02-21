@@ -1,5 +1,8 @@
 import Link from "next/link";
 import styles from "@/styles/Home.module.css";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { IconButton } from "@mui/material";
+import { useState } from "react";
 
 const convertTime = (dateString) => {
     let date = new Date(dateString);
@@ -30,22 +33,73 @@ const convertTime = (dateString) => {
     return timeAgo;
 };
 
-export default function QuizBlock({ post, isProfile }) {
+export default function QuizBlock({ post, isProfile, setSounds }) {
     const datePosted = convertTime(post.createdAt);
+    console.log(post.id);
+
+    const [isDeleting, setIsDeleting] = useState(false);
+
+    const handleDeleteQuizie = async (e) => {
+        e.preventDefault();
+
+        setIsDeleting(true);
+        const res = await fetch("/api/delete", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                quizId: post.id,
+            }),
+        });
+
+        if (res.ok) {
+            setSounds((oldSoundsList) => {
+                return oldSoundsList.filter((s) => s.id !== post.id);
+            });
+            setIsDeleting(false);
+            alert("Delete successful!");
+        } else {
+            setIsDeleting(false);
+            console.log(res.statusText);
+        }
+    };
 
     return (
         <div className={styles.quizblock}>
-            <h3>
-                <Link href={`/quizie/${post.id}`}>{post.title}</Link>
-            </h3>
-            {!isProfile && (
-                <p>
-                    <Link href={`/user/${post.creatorId}`}>
-                        {post.creator.name}
-                    </Link>
-                </p>
-            )}
-            <p>{datePosted}</p>
+            <span
+                style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                }}
+            >
+                <h3>
+                    <Link href={`/quizie/${post.id}`}>{post.title}</Link>
+                </h3>
+                <div>
+                    {isDeleting && <strong>Deleting...</strong>}
+                    <IconButton
+                        color="error"
+                        aria-label="upload picture"
+                        component="label"
+                        onClick={handleDeleteQuizie}
+                        disabled={isDeleting}
+                    >
+                        <DeleteIcon fontSize="large" />
+                    </IconButton>
+                </div>
+            </span>
+            <span style={{ display: "flex", justifyContent: "space-between" }}>
+                {!isProfile && (
+                    <p>
+                        <Link href={`/user/${post.creatorId}`}>
+                            {post.creator.name}
+                        </Link>
+                    </p>
+                )}
+                <p>{datePosted}</p>
+            </span>
         </div>
     );
 }
