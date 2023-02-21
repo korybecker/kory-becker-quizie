@@ -35,7 +35,6 @@ const convertTime = (dateString) => {
 
 export default function QuizBlock({ post, isProfile, setSounds }) {
     const datePosted = convertTime(post.createdAt);
-    console.log(post.id);
 
     const [isDeleting, setIsDeleting] = useState(false);
 
