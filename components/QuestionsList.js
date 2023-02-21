@@ -1,6 +1,15 @@
 import OptionsList from "./OptionsList";
 import { FormControl, FormLabel, RadioGroup, Button } from "@mui/material";
 
+const correctOptionStyle = {
+    fontWeight: "bold",
+    color: "green",
+};
+const incorrectOptionStyle = {
+    fontWeight: "bold",
+    color: "red",
+};
+
 export default function QuestionsList({
     questions,
     chosenOptions,
@@ -8,6 +17,7 @@ export default function QuestionsList({
     handleSubmit,
     quizTaken,
     pressedSubmit,
+    results,
 }) {
     return (
         <form onSubmit={handleSubmit} style={{ minWidth: "auto" }}>
@@ -21,6 +31,8 @@ export default function QuestionsList({
                 }}
             >
                 {questions.map((question, questionIndex) => {
+                    const isCorrect =
+                        quizTaken && results[questionIndex]?.isCorrect;
                     return (
                         <div
                             style={{
@@ -39,6 +51,9 @@ export default function QuestionsList({
                                     questionIndex={questionIndex}
                                     chosenOptions={chosenOptions}
                                     setChosenOptions={setChosenOptions}
+                                    isCorrect={isCorrect}
+                                    correctOptionStyle={correctOptionStyle}
+                                    incorrectOptionStyle={incorrectOptionStyle}
                                 />
                             </RadioGroup>
                             <hr width="100%" />
