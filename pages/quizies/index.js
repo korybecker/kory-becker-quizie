@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import QuizBlock from "@/components/QuizBlock";
 import styles from "@/styles/Home.module.css";
+import { useState } from "react";
 
 export const getServerSideProps = async () => {
     const posts = await prisma.quiz.findMany({
@@ -18,16 +19,22 @@ export const getServerSideProps = async () => {
 };
 
 export default function Quizies({ allPosts }) {
-    allPosts = JSON.parse(allPosts);
+    const [sounds, setSounds] = useState(JSON.parse(allPosts));
     return (
         <>
             <h1 style={{ textAlign: "center" }}>Quizies</h1>
             <div className={styles.container}>
-                {allPosts
+                {sounds
                     .slice(0)
                     .reverse()
                     .map((post, i) => {
-                        return <QuizBlock key={i} post={post} />;
+                        return (
+                            <QuizBlock
+                                key={i}
+                                post={post}
+                                setSounds={setSounds}
+                            />
+                        );
                     })}
             </div>
         </>
