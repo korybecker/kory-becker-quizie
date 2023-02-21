@@ -179,7 +179,7 @@ export default function Create() {
                 title,
                 description,
                 questions,
-                userId: session.userId,
+                userId: session ? session.userId : "",
             }),
         });
 
