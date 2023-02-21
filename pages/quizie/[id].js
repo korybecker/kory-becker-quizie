@@ -86,6 +86,7 @@ export default function Quiz({ quiz }) {
                 handleSubmit={handleSubmit}
                 quizTaken={quizTaken}
                 pressedSubmit={pressedSubmit}
+                results={results}
             />
         </>
     );
