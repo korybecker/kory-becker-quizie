@@ -58,6 +58,8 @@ export default function Create() {
         Router.push("/login");
     }
 
+    console.log(session.userId);
+
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [questions, setQuestions] = useState([
@@ -177,6 +179,7 @@ export default function Create() {
                 title,
                 description,
                 questions,
+                userId: session.userId,
             }),
         });
 
