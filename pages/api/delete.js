@@ -5,8 +5,6 @@ const prisma = new PrismaClient();
 export default async (req, res) => {
     const { quizId } = req.body;
 
-    // console.log(quizId);
-
     try {
         await prisma.answer.deleteMany({
             where: {

@@ -58,8 +58,6 @@ export default function Create() {
         Router.push("/login");
     }
 
-    console.log(session.userId);
-
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [questions, setQuestions] = useState([
