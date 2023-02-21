@@ -16,7 +16,7 @@ export default function OptionsList({
     };
     return (
         <>
-            {options.map((option, i) => {
+            {options.map((option, i) => (
                 <FormControlLabel
                     key={i}
                     value={option.text}
@@ -30,8 +30,8 @@ export default function OptionsList({
                                 : incorrectOptionStyle
                             : {} // don't style otherwise
                     }
-                />;
-            })}
+                />
+            ))}
         </>
     );
 }
