@@ -60,7 +60,7 @@ export default function Quiz({ quiz }) {
     const [startQuiz, setStartQuiz] = useState(false);
 
     useEffect(() => {
-        if (timeLimit && startQuiz && !quizTaken) {
+        if (timeLimit !== 0 && startQuiz && !quizTaken) {
             const interval = setInterval(() => {
                 setTimeLimit((time) => time - 1);
             }, 1000);
@@ -113,10 +113,12 @@ export default function Quiz({ quiz }) {
                             </>
                         )}
                     </h3>
-                    {timeLimit && <h3>Time Left: {formatTime(timeLimit)}</h3>}
+                    {timeLimit !== 0 && (
+                        <h3>Time Left: {formatTime(timeLimit)}</h3>
+                    )}
                 </span>
             </div>
-            {!startQuiz ? (
+            {!startQuiz && timeLimit > 0 ? (
                 <div
                     style={{
                         display: "flex",
