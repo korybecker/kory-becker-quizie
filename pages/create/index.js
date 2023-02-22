@@ -54,9 +54,6 @@ const alphabet = [
 
 export default function Create() {
     const { data: session } = useSession();
-    if (!session && typeof window !== "undefined") {
-        Router.push("/login");
-    }
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -66,20 +63,24 @@ export default function Create() {
     const [error, setError] = useState("");
     const [isUploading, setIsUploading] = useState(false);
     const [isFinished, setIsFinished] = useState(false);
+    const [timeLimit, setTimeLimit] = useState(null);
 
     const handleTitleChange = (event) => {
         setTitle(event.target.value);
     };
 
-    const handleDescriptionChange = (event) => {
-        setDescription(event.target.value);
+    const handleDescriptionChange = (e) => {
+        setDescription(e.target.value);
     };
 
-    const handleOptionChange = (questionIndex, optionIndex, event) => {
+    const handleTimeLimitChange = (e) => {
+        setTimeLimit(e.target.value);
+    };
+
+    const handleOptionChange = (questionIndex, optionIndex, e) => {
         const updatedQuestions = [...questions];
-        updatedQuestions[questionIndex].options[optionIndex][
-            event.target.name
-        ] = event.target.value;
+        updatedQuestions[questionIndex].options[optionIndex][e.target.name] =
+            e.target.value;
         setQuestions(updatedQuestions);
     };
 
@@ -154,6 +155,10 @@ export default function Create() {
             return setError("Quizie must have a title.");
         }
 
+        if (timeLimit < 0) {
+            return setError("Time limit cannot be negative");
+        }
+
         if (!hasCompletedQuestionFields) {
             return setError("Please complete all question fields.");
         }
@@ -178,6 +183,7 @@ export default function Create() {
                 description,
                 questions,
                 userId: session ? session.userId : "",
+                timeLimit,
             }),
         });
 
@@ -186,6 +192,7 @@ export default function Create() {
             setIsFinished(true);
             Router.push("/");
         } else {
+            setIsUploading(false);
             console.log(res.statusText);
         }
     };
@@ -200,15 +207,37 @@ export default function Create() {
             <h1 style={{ textAlign: "center" }}>Create Quizie</h1>
             <h3 style={{ color: "red", textAlign: "center" }}>{error}</h3>
             <form onSubmit={handleSubmit}>
-                <div style={{ display: "flex", justifyContent: "center" }}>
-                    <label style={{ width: "4rem" }}>
-                        <strong>Title</strong>
-                    </label>
-                    <input
-                        type="text"
-                        value={title}
-                        onChange={handleTitleChange}
-                    />
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        flexDirection: "column",
+                        alignItems: "center",
+                    }}
+                >
+                    <div>
+                        <label style={{ marginRight: "1rem" }}>
+                            <strong>Title</strong>
+                        </label>
+                        <input
+                            type="text"
+                            value={title}
+                            onChange={handleTitleChange}
+                        />
+                    </div>
+                    <div>
+                        <label
+                            style={{ marginRight: "1rem", marginLeft: "1rem" }}
+                        >
+                            <strong>Time Limit</strong>
+                        </label>
+                        <input
+                            style={{ width: "80px" }}
+                            type="number"
+                            value={timeLimit ? timeLimit : ""}
+                            onChange={handleTimeLimitChange}
+                        />
+                    </div>
                 </div>
 
                 <div className={styles.createquizblock}>
