@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export default async (req, res) => {
-    const { title, questions, userId } = req.body;
+    const { title, questions, userId, timeLimit } = req.body;
 
     const uploadedQuiz = await prisma.quiz.create({
         data: {
@@ -11,6 +11,7 @@ export default async (req, res) => {
             creator: {
                 connect: { id: userId },
             },
+            timeLimit: Number(timeLimit),
         },
     });
 
