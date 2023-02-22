@@ -57,6 +57,7 @@ export default function Quiz({ quiz }) {
     const [score, setScore] = useState(0);
     const [timeLimit, setTimeLimit] = useState(quiz.timeLimit);
     const [startQuiz, setStartQuiz] = useState(false);
+    console.log(timeLimit);
 
     useEffect(() => {
         if (timeLimit && startQuiz && !quizTaken) {
