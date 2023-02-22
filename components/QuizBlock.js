@@ -33,8 +33,10 @@ const convertTime = (dateString) => {
     return timeAgo;
 };
 
-export default function QuizBlock({ post, isProfile, setSounds }) {
+export default function QuizBlock({ post, isProfile, setSounds, userId }) {
     const datePosted = convertTime(post.createdAt);
+
+    console.log(userId, post.creatorId);
 
     const [isDeleting, setIsDeleting] = useState(false);
 
@@ -76,18 +78,20 @@ export default function QuizBlock({ post, isProfile, setSounds }) {
                 <h3>
                     <Link href={`/quizie/${post.id}`}>{post.title}</Link>
                 </h3>
-                <div>
-                    {isDeleting && <strong>Deleting...</strong>}
-                    <IconButton
-                        color="error"
-                        aria-label="upload picture"
-                        component="label"
-                        onClick={handleDeleteQuizie}
-                        disabled={isDeleting}
-                    >
-                        <DeleteIcon fontSize="large" />
-                    </IconButton>
-                </div>
+                {userId === post.creatorId && (
+                    <div>
+                        {isDeleting && <strong>Deleting...</strong>}
+                        <IconButton
+                            color="error"
+                            aria-label="upload picture"
+                            component="label"
+                            onClick={handleDeleteQuizie}
+                            disabled={isDeleting}
+                        >
+                            <DeleteIcon fontSize="large" />
+                        </IconButton>
+                    </div>
+                )}
             </span>
             <span style={{ display: "flex", justifyContent: "space-between" }}>
                 {!isProfile && (
