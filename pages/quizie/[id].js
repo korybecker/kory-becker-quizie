@@ -1,7 +1,8 @@
 import prisma from "@/lib/prisma";
 import QuestionsList from "@/components/QuestionsList";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styles from "@/styles/Home.module.css";
+import { Button } from "@mui/material";
 
 export const getServerSideProps = async ({ params }) => {
     let quiz = await prisma.quiz.findUnique({
@@ -23,6 +24,28 @@ export const getServerSideProps = async ({ params }) => {
     };
 };
 
+const formatTime = (time) => {
+    const hours = Math.floor(time / 3600);
+    const minutes = Math.floor((time % 3600) / 60);
+    const seconds = time % 60;
+
+    let result = "";
+
+    if (hours > 0) {
+        result += `${hours}h `;
+    }
+
+    if (minutes > 0 || hours > 0) {
+        result += `${minutes}min `;
+    }
+
+    if (seconds > 0 || (minutes === 0 && hours === 0)) {
+        result += `${seconds}s`;
+    }
+
+    return result.trim();
+};
+
 export default function Quiz({ quiz }) {
     quiz = JSON.parse(quiz);
     const [chosenOptions, setChosenOptions] = useState(
@@ -32,6 +55,17 @@ export default function Quiz({ quiz }) {
     const [pressedSubmit, setPressedSubmit] = useState(false);
     const [quizTaken, setQuizTaken] = useState(false);
     const [score, setScore] = useState(0);
+    const [timeLimit, setTimeLimit] = useState(quiz.timeLimit);
+    const [startQuiz, setStartQuiz] = useState(false);
+
+    useEffect(() => {
+        if (timeLimit && startQuiz && !quizTaken) {
+            const interval = setInterval(() => {
+                setTimeLimit((time) => time - 1);
+            }, 1000);
+            return () => clearInterval(interval);
+        }
+    }, [timeLimit, startQuiz]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -66,28 +100,48 @@ export default function Quiz({ quiz }) {
     return (
         <>
             <div className={styles.quizHeading}>
-                <div className={styles.quizHeadingEl}>
+                <span className={styles.quizHeadingElTop}>
                     <h3>{quiz.title}</h3>
-                </div>
-                <h3 className={styles.quizHeadingEl}>
-                    Score:{" "}
-                    {quizTaken && (
-                        <>
-                            {score}/{results.length}
-                        </>
-                    )}
-                </h3>
+                </span>
+                <span className={styles.quizHeadingElBottom}>
+                    <h3>
+                        Score:{" "}
+                        {quizTaken && (
+                            <>
+                                {score}/{results.length}
+                            </>
+                        )}
+                    </h3>
+                    {timeLimit && <h3>Time Left: {formatTime(timeLimit)}</h3>}
+                </span>
             </div>
-            <div>- {quiz.creator.name}</div>
-            <QuestionsList
-                questions={quiz.questions}
-                chosenOptions={chosenOptions}
-                setChosenOptions={setChosenOptions}
-                handleSubmit={handleSubmit}
-                quizTaken={quizTaken}
-                pressedSubmit={pressedSubmit}
-                results={results}
-            />
+            {!startQuiz ? (
+                <div
+                    style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        width: "100%",
+                    }}
+                >
+                    <Button
+                        sx={{ width: "300px" }}
+                        variant="contained"
+                        onClick={() => setStartQuiz(true)}
+                    >
+                        Start Quiz
+                    </Button>
+                </div>
+            ) : (
+                <QuestionsList
+                    questions={quiz.questions}
+                    chosenOptions={chosenOptions}
+                    setChosenOptions={setChosenOptions}
+                    handleSubmit={handleSubmit}
+                    quizTaken={quizTaken}
+                    pressedSubmit={pressedSubmit}
+                    results={results}
+                />
+            )}
         </>
     );
 }
