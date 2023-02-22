@@ -19,6 +19,7 @@ model Quiz {
   published Boolean    @default(false)
   creator   User?      @relation(fields: [creatorId], references: [id])
   creatorId String?
+  timeLimit Int?
   createdAt DateTime   @default(now()) @map(name: "created_at")
   updatedAt DateTime   @updatedAt @map(name: "updated_at")
 }
