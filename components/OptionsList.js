@@ -8,6 +8,7 @@ export default function OptionsList({
     isCorrect,
     correctOptionStyle,
     incorrectOptionStyle,
+    quizTaken,
 }) {
     const handler = (option) => {
         const newChosenOptions = [...chosenOptions];
@@ -24,7 +25,7 @@ export default function OptionsList({
                     label={option.text}
                     style={{ height: "30px" }}
                     sx={
-                        chosenOptions[questionIndex] === option.id
+                        quizTaken && chosenOptions[questionIndex] === option.id
                             ? isCorrect // style if chosen option
                                 ? correctOptionStyle
                                 : incorrectOptionStyle

@@ -54,6 +54,7 @@ export default function QuestionsList({
                                     isCorrect={isCorrect}
                                     correctOptionStyle={correctOptionStyle}
                                     incorrectOptionStyle={incorrectOptionStyle}
+                                    quizTaken={quizTaken}
                                 />
                             </RadioGroup>
                             <hr width="100%" />
