@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import QuizBlock from "@/components/QuizBlock";
 import styles from "@/styles/Home.module.css";
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 
 export const getServerSideProps = async () => {
     const posts = await prisma.quiz.findMany({
@@ -20,6 +21,8 @@ export const getServerSideProps = async () => {
 
 export default function Quizies({ allPosts }) {
     const [sounds, setSounds] = useState(JSON.parse(allPosts));
+    const { data: session, status } = useSession();
+
     return (
         <>
             <h1 style={{ textAlign: "center" }}>Quizies</h1>
@@ -33,6 +36,7 @@ export default function Quizies({ allPosts }) {
                                 key={i}
                                 post={post}
                                 setSounds={setSounds}
+                                userId={session ? session.userId : ""}
                             />
                         );
                     })}
