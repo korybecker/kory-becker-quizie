@@ -7,6 +7,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import { ThemeProvider } from "@emotion/react";
 import { createTheme } from "@mui/material/styles";
+import { Autocomplete, TextField } from "@mui/material";
 const theme = createTheme({
     status: {
         danger: "#e53e3e",
@@ -54,16 +55,22 @@ const alphabet = [
 
 export default function Create() {
     const { data: session } = useSession();
+    const questionTypes = [{ label: "Multiple Choice" }];
 
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [questions, setQuestions] = useState([
-        { text: "", options: [{ text: "", isAnswer: false }] },
+        {
+            text: "",
+            type: "Multiple Choice",
+            options: [{ text: "", isAnswer: false }],
+        },
     ]);
     const [error, setError] = useState("");
     const [isUploading, setIsUploading] = useState(false);
     const [isFinished, setIsFinished] = useState(false);
     const [timeLimit, setTimeLimit] = useState(null);
+    const [questionType, setQuestionType] = useState(questionTypes[0]);
 
     const handleTitleChange = (event) => {
         setTitle(event.target.value);
@@ -75,6 +82,14 @@ export default function Create() {
 
     const handleTimeLimitChange = (e) => {
         setTimeLimit(e.target.value);
+    };
+
+    const handleQuestionTypeChange = (e, newValue) => {
+        if (
+            !questionTypes.some((option) => option.label === questionType.label)
+        ) {
+            setQuestionType(newValue);
+        }
     };
 
     const handleOptionChange = (questionIndex, optionIndex, e) => {
@@ -193,7 +208,7 @@ export default function Create() {
             Router.push("/");
         } else {
             setIsUploading(false);
-            console.log(res.statusText);
+            setError(res.statusText);
         }
     };
 
@@ -345,7 +360,7 @@ export default function Create() {
                             </div>
                         ))}
                     </div>
-                    <div>
+                    <div style={{ display: "flex", flexDirection: "row" }}>
                         <ThemeProvider theme={theme}>
                             <Button
                                 variant="outlined"
@@ -366,6 +381,13 @@ export default function Create() {
                                 Question
                             </Button>
                         )}
+                        <Autocomplete
+                            value={questionType}
+                            onChange={handleQuestionTypeChange}
+                            options={questionTypes}
+                            getOptionLabel={(option) => option.label}
+                            renderInput={(params) => <TextField {...params} />}
+                        />
                     </div>
                     <Button
                         type="submit"
