@@ -22,7 +22,7 @@ export default function QuestionsList({
     return (
         <form onSubmit={handleSubmit} style={{ minWidth: "auto" }}>
             <FormControl
-                focused={false}
+                focused={true}
                 color="primary"
                 margin="dense"
                 sx={{
@@ -32,7 +32,8 @@ export default function QuestionsList({
             >
                 {questions.map((question, questionIndex) => {
                     const isCorrect =
-                        quizTaken && results[questionIndex]?.isCorrect;
+                        quizTaken && results[chosenOptions[questionIndex]];
+                    const color = isCorrect ? "success" : "error";
                     return (
                         <div
                             style={{
@@ -42,7 +43,10 @@ export default function QuestionsList({
                             }}
                             key={questionIndex}
                         >
-                            <FormLabel id="demo-radio-buttons-group-label">
+                            <FormLabel
+                                id="demo-radio-buttons-group-label"
+                                color={!quizTaken ? "primary" : color}
+                            >
                                 {questionIndex + 1}. {question.text}
                             </FormLabel>
                             <RadioGroup aria-labelledby="demo-radio-buttons-group-label">
