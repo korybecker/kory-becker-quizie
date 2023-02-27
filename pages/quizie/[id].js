@@ -19,7 +19,6 @@ export const getServerSideProps = async ({ params }) => {
         },
     });
     quiz = JSON.stringify(quiz);
-    console.log(quiz);
     return {
         props: { quiz },
     };
@@ -83,7 +82,11 @@ export default function Quiz({ quiz }) {
         const results = await res.json();
 
         if (res.ok) {
-            setResults(results.results);
+            const res = {};
+            for (let result of results.results) {
+                res[result.option.id] = result.isCorrect;
+            }
+            setResults(res);
             setQuizTaken(true);
 
             let score = 0;
@@ -109,7 +112,7 @@ export default function Quiz({ quiz }) {
                         Score:{" "}
                         {quizTaken && (
                             <>
-                                {score}/{results.length}
+                                {score}/{Object.keys(results).length}
                             </>
                         )}
                     </h3>
